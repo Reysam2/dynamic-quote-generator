@@ -43,7 +43,7 @@ async function getRandomQuote() {
   // catch an error if unsuccessful
   catch (error) {
     console.log('Could not retrieve data', error);
-    
+
     return `<em>Sorry, could not fetch a quote. Please try again.</em>`
   }
 }
@@ -52,37 +52,51 @@ async function getRandomQuote() {
 //random quote block
 
 async function showRandomQuote() {
-  // when loading
-  if (isLoading) {
-    quoteDisplay.textContent = "Loading...";
-    return
-  };
-  isLoading = true;
+    // when loading
+    if (isLoading) {
+      quoteDisplay.textContent = "Loading...";
+      return
+    };
+    isLoading = true;
 
-  // random quote selector
-  let random = await getRandomQuote()
+    // random quote selector
+    let random = await getRandomQuote()
 
-  let randomQuote = random[Math.floor(Math.random() * random.length)];
-
-
-  // create a p tag and append to dom
-  const quoteItem = document.createElement('p');
-
-  quoteItem.innerHTML = randomQuote;
-  quoteDisplay.textContent = "";
-  quoteDisplay.appendChild(quoteItem);
-
-  isLoading = false
-
-}
+    let randomQuote = random[Math.floor(Math.random() * random.length)];
 
 
-// event listeners
-newQuoteBtn.addEventListener('click', showRandomQuote);
+    // create a p tag and append to dom
+    const quoteItem = document.createElement('p');
 
-document.addEventListener('keyup', (e) => {
-  if (e.key === 'Enter' && document.activeElement !== newQuoteBtn) {
-    e.preventDefault();
-    showRandomQuote()
-  }
-});
+    quoteItem.innerHTML = randomQuote;
+    quoteDisplay.textContent = "";
+    quoteDisplay.appendChild(quoteItem);
+
+
+    // Store generated quotes
+    function toStorage() {
+      let storedQuote = JSON.parse(localStorage.getItem('Quotes') || '[]')
+   
+      storedQuote.push(randomQuote)
+
+      localStorage.setItem('Quotes', JSON.stringify(storedQuote))
+
+    }
+      toStorage()
+
+
+
+      isLoading = false
+
+    }
+
+
+    // event listeners
+    newQuoteBtn.addEventListener('click', showRandomQuote);
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' && document.activeElement !== newQuoteBtn) {
+        e.preventDefault();
+        showRandomQuote()
+      }
+    });
