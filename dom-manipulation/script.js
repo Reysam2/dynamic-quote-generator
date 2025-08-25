@@ -1,102 +1,95 @@
-// Create a “Dynamic Quote Generator” that displays different quotes based on user-selected categories. Include functionality to add new quotes and categories dynamically through the user interface.
+document.addEventListener('DOMContentLoaded', () => {
+
+  // elements block
+  const quoteDisplay = document.querySelector('#quoteDisplay')
+  const newQuoteBtn = document.getElementById('newQuote')
+  const newQuoteInput = document.querySelector('#newQuoteText')
+  const categoryInput = document.querySelector('#newQuoteCategory')
+  const addQuoteBtn = document.querySelector('#addQuoteBtn')
+  // retrieve 'Quotes' from local storage if present and if not, start with an empty array
+  let quotesArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
 
 
-// displays different quotes
-// functionality to add new quotes
 
 
-const quoteDisplay = document.querySelector('#quoteDisplay')
-const newQuoteBtn = document.querySelector('#newQuote')
-let isLoading = false;
-
-// Write a JavaScript file (script.js) that handles the creation and manipulation of DOM elements based on user interactions.
-
-// fetch quotes from api
-async function getRandomQuote() {
-  try {
-    const response = await fetch('https://dummyjson.com/quotes');
-
-    // returns an object
-    const data = await response.json();
-    console.log(data)
-
-    // get the author and quotes of the author 
-
-    //contains an array of objects
-    let quoteArray = data.quotes;
-    console.log(quoteArray);
-
-    // create new array with just specified item
-    let quotes = [];
+  // gets userInput thus text and category
+  // saves user text and category to local storage 
+  function createAddQuoteForm() {
+    let newQuoteInputText = newQuoteInput.value.trim()
+    let categoryInputText = categoryInput.value.trim()
 
 
-    // loop to get the desired items
-    for (let obj of quoteArray) {
-
-      // push items to quotes = []
-      quotes.push(`<strong>${obj.author}</strong>: ${obj.quote}`)
-
-    }
-    return quotes
-
-  }
-  // catch an error if unsuccessful
-  catch (error) {
-    console.log('Could not retrieve data', error);
-
-    return `<em>Sorry, could not fetch a quote. Please try again.</em>`
-  }
-}
-
-
-//random quote block
-
-async function showRandomQuote() {
-    // when loading
-    if (isLoading) {
-      quoteDisplay.textContent = "Loading...";
+    if (!newQuoteInputText || !categoryInputText) {
+      quoteDisplay.textContent = 'Please enter both fields'
       return
-    };
-    isLoading = true;
-
-    // random quote selector
-    let random = await getRandomQuote()
-
-    let randomQuote = random[Math.floor(Math.random() * random.length)];
-
-
-    // create a p tag and append to dom
-    const quoteItem = document.createElement('p');
-
-    quoteItem.innerHTML = randomQuote;
-    quoteDisplay.textContent = "";
-    quoteDisplay.appendChild(quoteItem);
-
-
-    // Store generated quotes
-    function toStorage() {
-      let storedQuote = JSON.parse(localStorage.getItem('Quotes') || '[]')
-   
-      storedQuote.push(randomQuote)
-
-      localStorage.setItem('Quotes', JSON.stringify(storedQuote))
-
-    }
-      toStorage()
-
-
-
-      isLoading = false
-
     }
 
 
-    // event listeners
-    newQuoteBtn.addEventListener('click', showRandomQuote);
+    quoteDisplay.textContent = ''
+    // creates an object based on user data
+    let userQuote = {
+      'text': newQuoteInputText,
+      'category': categoryInputText
+    }
 
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter' && document.activeElement !== newQuoteBtn) {
-        e.preventDefault();
-        showRandomQuote()
-      }
-    });
+    // push userQuote (an array of objects) to quotesArray
+    quotesArray.push(userQuote);
+
+    //  save to local storage
+    localStorage.setItem('Quotes', JSON.stringify(quotesArray))
+    quoteDisplay.textContent = "✅ Quote added!";
+
+
+    console.log(quotesArray)
+
+    return quotesArray
+
+  }
+
+
+  // pick a random object and append its specified items to quoteDisplay
+  function showRandomQuote() {
+
+    if (quotesArray.length === 0) {
+      quoteDisplay.textContent = 'No quotes available. Please add one first!';
+      return
+    }
+
+    quoteDisplay.textContent = '';
+    let randomIndex = Math.floor(Math.random() * quotesArray.length)
+    let randomQuote = quotesArray[randomIndex]
+ 
+    let p = document.createElement('p');
+    p.innerHTML = ` '${randomQuote.text}' - [${randomQuote.category}] `;
+    quoteDisplay.appendChild(p);
+
+
+  }
+ 
+
+  // events
+  newQuoteInput.addEventListener('input', () => {
+    quoteDisplay.textContent = ''
+  })
+  categoryInput.addEventListener('input', () => {
+    quoteDisplay.textContent = ''
+  })
+
+  addQuoteBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    createAddQuoteForm()
+    newQuoteInput.value = ''
+    categoryInput.value = ''
+
+  })
+
+
+  newQuoteBtn.addEventListener('click', (e) => {
+    e.preventDefault() 
+    showRandomQuote()
+  })
+
+
+
+
+})
