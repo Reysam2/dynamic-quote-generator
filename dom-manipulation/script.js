@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // elements block
 
-  // const newQuoteBtn = document.getElementById('newQuote')
+  const newQuoteBtn = document.getElementById('newQuote')
 
   const newQuoteInput = document.querySelector('#newQuoteText')
   const categoryInput = document.querySelector('#newQuoteCategory')
@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderQuotes() {
     quoteDisplay.textContent = '';
 
+    // function() 
     userDataArray.forEach((obj) => {
       createFunction(obj, quoteDisplay)
     })
@@ -86,11 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let categories = userDataArray.map(quote => quote.category)
-    console.log(categories)
 
 
     let uniqueCategories = new Set(categories)
-    console.log(uniqueCategories)
+    // console.log(uniqueCategories)
 
     uniqueCategories.forEach(obj => {
       let dropDownOption = document.createElement('option');
@@ -102,6 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
+  function showRandomQuote() {
+    let random = Math.floor(Math.random() * userDataArray.length)
+    let randomQuote = [userDataArray[random]];
+    quoteDisplay.textContent = '';
+
+    console.log(randomQuote);
+
+    randomQuote.forEach(obj => createFunction(obj, quoteDisplay))
+
+  }
 
 
   if (addQuoteBtn) {
@@ -147,6 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
       renderQuotes();
     }
 
+  })
+
+  newQuoteBtn.addEventListener('click', () => {
+    showRandomQuote()
   })
 
 
