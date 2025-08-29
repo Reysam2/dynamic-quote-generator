@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // elements block
-
   const newQuoteBtn = document.getElementById('newQuote')
-
   const newQuoteInput = document.querySelector('#newQuoteText')
   const categoryInput = document.querySelector('#newQuoteCategory')
   const addQuoteBtn = document.querySelector('#addQuoteBtn')
   const quoteDisplay = document.querySelector('#quoteDisplay')
   const categoryDropDown = document.querySelector('#categoryDropDown')
+
   // retrieve 'Quotes' from local storage if present and if not, start with an empty array
   let userDataArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
 
@@ -17,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // saves user data to local storage 
   function createAddQuoteForm() {
     const newQuoteInputText = newQuoteInput.value.trim()
-    const categoryInputText = categoryInput.value.trim();
+    const categoryInputText = categoryInput.value.trim().toLowerCase();
 
     if (!newQuoteInputText || !categoryInputText) {
       alert('Please enter both fields')
-      return
+      return null
     }
 
     // collection of user data in an object
@@ -40,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return userDataObj
   }
 
-  function createFunction(obj, targetContainer) {
+  // a reusable function for the creation of element of the displayQuote
+  function createQuoteCard(obj, targetContainer) {
     let quoteCard = document.createElement('div');
     quoteCard.classList.add('quote__card')
 
@@ -68,17 +68,19 @@ document.addEventListener('DOMContentLoaded', () => {
     targetContainer.appendChild(quoteCard)
   }
 
+  // a function that gets user data from local storage and render it in displayQuote block when called 
   function renderQuotes() {
-    quoteDisplay.textContent = '';
-
-    // function() 
+    if (!quoteDisplay) return;
+    quoteDisplay.innerHTML = '';
     userDataArray.forEach((obj) => {
-      createFunction(obj, quoteDisplay)
+      createQuoteCard(obj, quoteDisplay)
     })
 
   }
 
+  // a function that gets unique categories from local storage and renders them in the dropDown menu of categories
   function populateCategories() {
+    if (!categoryDropDown) return;
     categoryDropDown.textContent = '';
     let allCategory = document.createElement('option')
     allCategory.value = 'All category';
@@ -102,20 +104,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
+  // a function that gets a random quote from local storage and render it in the displayQuote block when called
   function showRandomQuote() {
+    if (userDataArray.length === 0) {
+      alert('Please add a quote first!')
+      return
+    }
     let random = Math.floor(Math.random() * userDataArray.length)
     let randomQuote = [userDataArray[random]];
     quoteDisplay.innerHTML = '';
 
-    console.log(randomQuote);
-
     function displayRandomQuote() {
-      randomQuote.forEach(obj => createFunction(obj, quoteDisplay))
+      randomQuote.forEach(obj => createQuoteCard(obj, quoteDisplay))
     }
     displayRandomQuote()
   }
 
 
+
+  // renders if 'addQuoteBtn' => (add button) exists on current page
   if (addQuoteBtn) {
     addQuoteBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -123,52 +130,115 @@ document.addEventListener('DOMContentLoaded', () => {
       if (newQuote) {
         renderQuotes()
         populateCategories()
+        postQuotesToServer(newQuote)
       }
     })
   }
 
-  renderQuotes()
-  populateCategories()
+  // render functions upon page load
+  if (quoteDisplay) {
+    renderQuotes()
+    populateCategories()
+  }
 
-  categoryDropDown.addEventListener('change', () => {
+  if (categoryDropDown) {
 
-    let selectedCategory = categoryDropDown.value
+    // event listeners
+    categoryDropDown.addEventListener('change', () => {
 
-    if (selectedCategory !== 'All category') {
+      let selectedCategory = categoryDropDown.value
 
-      function filterQuotes() {
-        if (selectedCategory) {
+      if (selectedCategory !== 'All category') {
 
-          quoteDisplay.textContent = '';
+        function filterQuotes() {
+          if (selectedCategory) {
 
-          let categoryFilter = userDataArray.filter((item) => item.category === selectedCategory)
+            quoteDisplay.textContent = '';
 
-          categoryFilter.forEach((obj) =>
-            createFunction(obj, quoteDisplay)
-          )
+            let categoryFilter = userDataArray.filter((item) => item.category === selectedCategory)
 
-          return
+            categoryFilter.forEach((obj) =>
+              createQuoteCard(obj, quoteDisplay)
+            )
+
+            return
+          }
         }
+
+        filterQuotes()
+
       }
 
-      filterQuotes()
+      else {
+        renderQuotes();
+      }
 
+    })
+
+  }
+
+  if (newQuoteBtn) {
+
+    newQuoteBtn.addEventListener('click', () => {
+      showRandomQuote()
+    })
+
+  }
+
+
+  // posting user Data to server using a mock api
+
+  let postUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  function postQuotesToServer(newQuote) {
+    const serverData = {
+      'title': newQuote.category,
+      'body': newQuote.text
+    };
+
+    console.log('📡 Sending data to server:', serverData);
+
+    fetch(postUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer 98N8m4HVZHGgxM4QifrHhCoJrm09gk2GktFrHlAq003ae499'
+      },
+      body: JSON.stringify(serverData)
+
+    })
+      .then((response) => {
+        console.log('✅ Server responded with status:', response.status);
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then((data) => console.log('Quotes posted successfully', data))
+      .catch((error) => console.error('Error posting quote:', error))
+
+
+
+
+  }
+
+
+  async function fetchQuotesFromServer() {
+    console.log('📡 Fetching all data from server...');
+    try {
+      let response = await fetch(postUrl);
+      if (!response.ok) {
+        throw new Error('Response was not ok')
+      }
+
+      let data = await response.json();
+      console.log('✅ Data retrieved from server:', data);
+      return data
+    } catch (error) {
+      console.error('Could not retrieve data', error)
     }
+  }
 
-    else {
-      renderQuotes();
-    }
-
-  })
-
-  newQuoteBtn.addEventListener('click', () => {
-    showRandomQuote()
-  })
-
-
-
-
-
-
+  fetchQuotesFromServer().then(data => console.log(data));
 
 })
