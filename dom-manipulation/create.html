@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Quote Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="header__nav">
+        <div class="nav__heading-blk">
+          <h1 class="nav__heading">DQG</h1>
+        </div>
+
+        <div class="nav__link-blk">
+          <a class="nav__link" href="index.html">Back to Quotes</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section class="main__form-blk">
+        <div class="main__form-heading-blk">
+          <h2>Create a new Quote</h2>
+        </div>
+
+        <form class="form">
+          <div class="field">
+            <label class="label" for="newQuoteText">New Quote</label>
+            <input
+              class="input"
+              id="newQuoteText"
+              type="text"
+              placeholder="Enter a new quote"
+            />
+          </div>
+
+          <div class="field">
+            <label class="label" for="newQuoteCategory"> category</label>
+            <input
+              class="input"
+              id="newQuoteCategory"
+              type="text"
+              placeholder="Enter quote category"
+            />
+          </div>
+
+          <div>
+            <button class="create-btn" id="addQuoteBtn">Add Quote</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

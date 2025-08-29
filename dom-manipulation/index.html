@@ -4,21 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic Quote Generator</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
-    <button id="newQuote">Show New Quote</button>
+    <header class="header">
+      <nav class="header__nav">
+        <div class="nav__heading-blk">
+          <h1 class="nav__heading">DQG</h1>
+        </div>
 
-    <form class="form">
-      <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-      <input
-        id="newQuoteCategory"
-        type="text"
-        placeholder="Enter quote category"
-      />
-      <button id="addQuoteBtn" >Add Quote</button>
-    </form>
+        <div class="nav__link-blk">
+          <a class="nav__link" href="create.html">Create a quote</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section class="main__form-blk">
+        <div>
+          <h1>Dynamic Quote Generator</h1>
+        </div>
+
+        <div class="btn-select-blk">
+          <div class="show-quote-btn-blk">
+            <button class="show-quote-btn" id="newQuote">Show New Quote</button>
+          </div>
+
+          <div class="show-quote-btn-blk">
+            <select class="category__drop-down" id="categoryDropDown"></select>
+          </div>
+        </div>
+
+        <div class="main__rendering">
+          <div class="quotes__container" id="quoteDisplay">
+            <div class="quote__card">
+              <div class="quote-blk">
+                <p class="quote-txt">text</p>
+              </div>
+
+              <div class="cat-blk">
+                <p class="cat-txt">cat</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <script src="script.js"></script>
   </body>

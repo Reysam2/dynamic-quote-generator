@@ -1,93 +1,156 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // elements block
-  const quoteDisplay = document.querySelector('#quoteDisplay')
-  const newQuoteBtn = document.getElementById('newQuote')
+
+  // const newQuoteBtn = document.getElementById('newQuote')
+
   const newQuoteInput = document.querySelector('#newQuoteText')
   const categoryInput = document.querySelector('#newQuoteCategory')
   const addQuoteBtn = document.querySelector('#addQuoteBtn')
+  const quoteDisplay = document.querySelector('#quoteDisplay')
+  const categoryDropDown = document.querySelector('#categoryDropDown')
   // retrieve 'Quotes' from local storage if present and if not, start with an empty array
-  let quotesArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
+  let userDataArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
 
 
-
-
-  // gets userInput thus text and category
-  // saves user text and category to local storage 
+  // a function that extracts userData thus text and category in an object
+  // saves user data to local storage 
   function createAddQuoteForm() {
-    let newQuoteInputText = newQuoteInput.value.trim()
-    let categoryInputText = categoryInput.value.trim()
-
+    const newQuoteInputText = newQuoteInput.value.trim()
+    const categoryInputText = categoryInput.value.trim();
 
     if (!newQuoteInputText || !categoryInputText) {
-      quoteDisplay.textContent = 'Please enter both fields'
+      alert('Please enter both fields')
       return
     }
 
-
-    quoteDisplay.textContent = ''
-    // creates an object based on user data
-    let userQuote = {
+    // collection of user data in an object
+    const userDataObj = {
       'text': newQuoteInputText,
       'category': categoryInputText
-    }
+    };
 
-    // push userQuote (an array of objects) to quotesArray
-    quotesArray.push(userQuote);
+    userDataArray.unshift(userDataObj)
 
-    //  save to local storage
-    localStorage.setItem('Quotes', JSON.stringify(quotesArray))
-    quoteDisplay.textContent = "✅ Quote added!";
+    // store collected user data to local storage
+    localStorage.setItem('Quotes', JSON.stringify(userDataArray))
 
-
-    console.log(quotesArray)
-
-    return quotesArray
-
-  }
-
-
-  // pick a random object and append its specified items to quoteDisplay
-  function showRandomQuote() {
-
-    if (quotesArray.length === 0) {
-      quoteDisplay.textContent = 'No quotes available. Please add one first!';
-      return
-    }
-
-    quoteDisplay.textContent = '';
-    let randomIndex = Math.floor(Math.random() * quotesArray.length)
-    let randomQuote = quotesArray[randomIndex]
- 
-    let p = document.createElement('p');
-    p.innerHTML = ` '${randomQuote.text}' - [${randomQuote.category}] `;
-    quoteDisplay.appendChild(p);
-
-
-  }
- 
-
-  // events
-  newQuoteInput.addEventListener('input', () => {
-    quoteDisplay.textContent = ''
-  })
-  categoryInput.addEventListener('input', () => {
-    quoteDisplay.textContent = ''
-  })
-
-  addQuoteBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    createAddQuoteForm()
     newQuoteInput.value = ''
     categoryInput.value = ''
+    return userDataObj
+  }
+
+  function createFunction(obj, targetContainer) {
+    let quoteCard = document.createElement('div');
+    quoteCard.classList.add('quote__card')
+
+    let quoteTextBlock = document.createElement('div')
+    quoteTextBlock.classList.add('quote-blk')
+
+    let categoryTextBlock = document.createElement('div')
+    categoryTextBlock.classList.add('cat-blk')
+
+    let quoteText = document.createElement('p')
+    quoteText.classList.add('quote-txt')
+    quoteText.textContent = obj.text
+
+    let catText = document.createElement('p')
+    catText.classList.add('cat-txt')
+    catText.textContent = obj.category
+
+
+    quoteTextBlock.appendChild(quoteText)
+    categoryTextBlock.appendChild(catText);
+
+    quoteCard.appendChild(quoteTextBlock)
+    quoteCard.appendChild(categoryTextBlock);
+
+    targetContainer.appendChild(quoteCard)
+  }
+
+  function renderQuotes() {
+    quoteDisplay.textContent = '';
+
+    userDataArray.forEach((obj) => {
+      createFunction(obj, quoteDisplay)
+    })
+
+  }
+
+  function populateCategories() {
+    categoryDropDown.textContent = '';
+    let allCategory = document.createElement('option')
+    allCategory.value = 'All category';
+    allCategory.textContent = 'All category';
+    categoryDropDown.appendChild(allCategory)
+
+
+    let categories = userDataArray.map(quote => quote.category)
+    console.log(categories)
+
+
+    let uniqueCategories = new Set(categories)
+    console.log(uniqueCategories)
+
+    uniqueCategories.forEach(obj => {
+      let dropDownOption = document.createElement('option');
+      dropDownOption.innerText = obj;
+      dropDownOption.value = obj;
+      categoryDropDown.appendChild(dropDownOption)
+    })
+
+
+  }
+
+
+
+  if (addQuoteBtn) {
+    addQuoteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      let newQuote = createAddQuoteForm()
+      if (newQuote) {
+        renderQuotes()
+        populateCategories()
+      }
+    })
+  }
+
+  renderQuotes()
+  populateCategories()
+
+  categoryDropDown.addEventListener('change', () => {
+
+    let catValue = categoryDropDown.value
+
+    if (catValue !== 'All category') {
+
+      function filterQuotes() {
+        if (catValue) {
+
+          quoteDisplay.textContent = '';
+
+          let categoryFilter = userDataArray.filter((item) => item.category === catValue)
+
+          categoryFilter.forEach((obj) =>
+            createFunction(obj, quoteDisplay)
+          )
+
+          return
+        }
+      }
+
+      filterQuotes()
+
+    }
+
+    else {
+      renderQuotes();
+    }
 
   })
 
 
-  newQuoteBtn.addEventListener('click', (e) => {
-    e.preventDefault() 
-    showRandomQuote()
-  })
+
 
 
 
