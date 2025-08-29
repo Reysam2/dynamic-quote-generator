@@ -105,12 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
   function showRandomQuote() {
     let random = Math.floor(Math.random() * userDataArray.length)
     let randomQuote = [userDataArray[random]];
-    quoteDisplay.textContent = '';
+    quoteDisplay.innerHTML = '';
 
     console.log(randomQuote);
 
-    randomQuote.forEach(obj => createFunction(obj, quoteDisplay))
-
+    function displayRandomQuote() {
+      randomQuote.forEach(obj => createFunction(obj, quoteDisplay))
+    }
+    displayRandomQuote()
   }
 
 
@@ -130,16 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   categoryDropDown.addEventListener('change', () => {
 
-    let catValue = categoryDropDown.value
+    let selectedCategory = categoryDropDown.value
 
-    if (catValue !== 'All category') {
+    if (selectedCategory !== 'All category') {
 
       function filterQuotes() {
-        if (catValue) {
+        if (selectedCategory) {
 
           quoteDisplay.textContent = '';
 
-          let categoryFilter = userDataArray.filter((item) => item.category === catValue)
+          let categoryFilter = userDataArray.filter((item) => item.category === selectedCategory)
 
           categoryFilter.forEach((obj) =>
             createFunction(obj, quoteDisplay)
