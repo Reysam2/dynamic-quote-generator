@@ -112,7 +112,7 @@ body {
   box-shadow: 2px 2px 4px 5px rgba(57, 24, 141, 0.2);
 }
 
-.create-btn ,.show-quote-btn {
+.create-btn ,.show-quote-btn,.export-quote-btn  {
   color: #f2f2f2;
   background-color: rgb(57, 24, 141);
   padding: 1rem 1rem;
@@ -124,29 +124,63 @@ body {
   transition: all 0.13ms ease;
 }
 
-.create-btn:active ,.show-quote-btn:active  {
+.import-quote-btn {
+  margin-right: 5rem;
+}
+
+
+
+.create-btn:active ,.show-quote-btn:active,
+.export-quote-btn:active,  
+.import-quote-input:active  {
   transform: translate(0.2rem, 0.3rem); 
+}
+
+.create-n-import-blk {
+  display:flex;
+  align-items: center;
+  flex:1;
+  flex-wrap: wrap;
+
+}
+
+.import-quote-input {
+  color: #f2f2f2;
+  background-color: rgb(57, 24, 141);
+  padding: 1rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 1.5rem 7rem  0  0 ; 
+  cursor: pointer;
+  transition: all 0.13ms ease;
+  appearance: none;
 }
 
 
 /* ////////// */
 
-.show-quote-btn {
-  margin: 0;
-}
-
 .btn-select-blk {
-  width:85%;
+ width: 85%;
   display:flex;
   justify-content: space-around;
   margin-top:2rem;
   align-items: center;
 }
 
+.export-quote-btn {
+  margin: 0;
+}
+
 .rendering__select-blk {
   display: flex;
   justify-content: space-between;
   align-items: center;
+ 
+}
+
+.show-quote-btn {
+  margin: 0;
 }
 
 .category__drop-down {

@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const addQuoteBtn = document.querySelector('#addQuoteBtn')
   const quoteDisplay = document.querySelector('#quoteDisplay')
   const categoryDropDown = document.querySelector('#categoryDropDown')
+  const importFile = document.querySelector('#import-file')
+  const exportQuoteBtn = document.querySelector('#export-quote')
 
   // retrieve 'Quotes' from local storage if present and if not, start with an empty array
   let userDataArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
@@ -79,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
+
+
   // a function that gets unique categories from local storage and renders them in the dropDown menu of categories
   function populateCategories() {
     if (!categoryDropDown) return;
@@ -120,6 +124,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     displayRandomQuote()
   }
+
+
+  // a function that imports user uploaded data and add the data to local storage
+  function importFromJsonFile(event) {
+    const fileReader = new FileReader()
+    fileReader.onload = function (event) {
+      try {
+        const importedQuotes = JSON.parse(event.target.result)
+        // check if it is an array
+        if (!Array.isArray(importedQuotes)) {
+          alert('Invalid file format. Must be an array of quotes')
+          return
+        }
+        // add imported quotes to existing ones
+        userDataArray.push(...importedQuotes)
+
+        // save back to localstorage
+        localStorage.setItem('Quotes', JSON.stringify(userDataArray))
+
+        // update the page
+        renderQuotes()
+        alert("Quotes imported successfully!");
+      } catch (error) {
+        alert('Error reading file', error.message)
+      }
+    }
+    fileReader.readAsText(event.target.files[0])
+  }
+
+
+  // a function that exports user data or downloads user data in a json format when called
+  function exportToJsonFile() {
+    // turn quotes into text string 
+    const dataStr = JSON.stringify(userDataArray, null, 2)
+
+    // put the text inside a file package(Blob)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+
+    // create a link for download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    // click the link to download automatically
+    link.href = url;
+    link.download = 'quotes.json';
+    link.click()
+    URL.revokeObjectURL(url);
+  }
+
 
 
 
@@ -224,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+
   async function fetchQuotesFromServer() {
     console.log('📡 Fetching all data from server...');
     try {
@@ -242,4 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchQuotesFromServer().then(data => console.log(data));
 
+
+  // exportToJsonFile()
+  exportQuoteBtn.addEventListener('click', exportToJsonFile)
+
 })
+
+

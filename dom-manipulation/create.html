@@ -46,8 +46,16 @@
             />
           </div>
 
-          <div>
-            <button class="create-btn" id="addQuoteBtn">Add Quote</button>
+          <div class="create-n-import-blk">
+            <div class="import-quote-blk">
+
+              <input class="import-quote-input"  type="file" name="quote" 
+              onchange="importFromJsonFile(event)" accept=".json" placeholder="Upload a file" id="import-file">
+            </div>
+
+            <div class="create-btn-blk">
+              <button class="create-btn" id="addQuoteBtn">Add Quote</button>
+            </div>
           </div>
         </form>
       </section>
