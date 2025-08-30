@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
   // elements block
@@ -10,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryDropDown = document.querySelector('#categoryDropDown')
   const importFile = document.querySelector('#import-file')
   const exportQuoteBtn = document.querySelector('#export-quote')
+  const displayUpdateMessage = document.querySelector('#server__message-blk')
 
   // retrieve 'Quotes' from local storage if present and if not, start with an empty array
   let userDataArray = JSON.parse(localStorage.getItem('Quotes') || '[]');
@@ -71,6 +71,24 @@ document.addEventListener('DOMContentLoaded', () => {
     targetContainer.appendChild(quoteCard)
   }
 
+  // a function that notifies the user on server updates
+  function serverUpdateMessage() {
+    if (!displayUpdateMessage) return;
+
+    displayUpdateMessage.textContent = '';
+    let updateMessage = document.createElement('p');
+    updateMessage.classList.add('server__message-text');
+    updateMessage.textContent = 'Quotes updated from server!';
+    displayUpdateMessage.appendChild(updateMessage)
+
+    setTimeout(() => {
+      displayUpdateMessage.textContent = '';
+    }, 3500)
+
+    console.log('Quotes synced with server!')
+
+  }
+
   // a function that gets user data from local storage and render it in displayQuote block when called 
   function renderQuotes() {
     if (!quoteDisplay) return;
@@ -80,8 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
   }
-
-
 
   // a function that gets unique categories from local storage and renders them in the dropDown menu of categories
   function populateCategories() {
@@ -125,8 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayRandomQuote()
   }
 
-
-  // a function that imports user uploaded data and add the data to local storage
+  // a function that imports user uploaded data and add the data to local
   function importFromJsonFile(event) {
     const fileReader = new FileReader()
     fileReader.onload = function (event) {
@@ -152,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     fileReader.readAsText(event.target.files[0])
   }
-
 
   // a function that exports user data or downloads user data in a json format when called
   function exportToJsonFile() {
@@ -195,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCategories()
   }
 
+  // renders if categoryDropdown can be found on current page.
   if (categoryDropDown) {
 
     // event listeners
@@ -231,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
+  // renders if newQuoteBtn can be found on current page
   if (newQuoteBtn) {
 
     newQuoteBtn.addEventListener('click', () => {
@@ -277,29 +293,76 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-
   async function fetchQuotesFromServer() {
     console.log('📡 Fetching all data from server...');
     try {
       let response = await fetch(postUrl);
       if (!response.ok) {
-        throw new Error('Response was not ok')
+        throw new Error('Response was not OK')
       }
 
       let data = await response.json();
       console.log('✅ Data retrieved from server:', data);
-      return data
+
+      return data.map(item => ({
+        text: item.body,
+        category: item.category || 'alx'
+      }))
+
     } catch (error) {
       console.error('Could not retrieve data', error)
+      return [];
     }
   }
 
-  fetchQuotesFromServer().then(data => console.log(data));
 
+  async function syncQuotes() {
+    // fetch quotes from server
+    let serverQuotes = await fetchQuotesFromServer();
+    let updated = false;
+
+    // loop through each server quote
+    serverQuotes.forEach(serverQuote => {
+      // check if the quote already exists locally with same text
+      const localeQuote = userDataArray.find(quote => {
+        return quote.text === serverQuote.text
+      })
+
+
+      if (localeQuote) {
+        // conflict detected: same text but different category
+        if (localeQuote.category !== serverQuote.category) {
+          // update category
+          localeQuote.category = serverQuote.category
+          updated = true
+        }
+
+
+      }
+
+      else {
+        // quote doesn't exist locally
+        userDataArray.push(serverQuote)
+        updated = true
+      }
+    })
+
+    // save changed and re-render
+    if (updated) {
+      localStorage.setItem('Quotes', JSON.stringify(userDataArray));
+      renderQuotes();
+      populateCategories()
+      serverUpdateMessage()
+    }
+
+  }
+
+  // run sync every 10 seconds
+  setInterval(syncQuotes, 10000)
+
+  fetchQuotesFromServer()
 
   // exportToJsonFile()
   exportQuoteBtn.addEventListener('click', exportToJsonFile)
 
 })
-
-

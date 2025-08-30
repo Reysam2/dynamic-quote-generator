@@ -23,6 +23,10 @@
       <section class="main__form-blk">
         <div class="main__form-heading-blk">
           <h1 class="main__form-heading">Dynamic Quote Generator</h1>
+
+          <div style="display:flex;;" class="server__message-blk" id="server__message-blk">
+         
+          </div>
         </div>
 
         <div class="btn-select-blk">
@@ -31,15 +35,25 @@
           </div>
 
           <div class="export-quote-blk">
-            <button class="export-quote-btn" id="export-quote">Export Quotes</button>
+            <button class="export-quote-btn" id="export-quote">
+              Export Quotes
+            </button>
           </div>
 
-           <div class="import-quote-blk">
-            <label class="import-quote-input" for="import-file">Upload quotes</label>
-              <input  class="import-quote-input"  type="file" name="quote" 
-              onchange="importFromJsonFile(event)" accept=".json" title="Upload a file" id="import-file">
-            </div>
-
+          <div class="import-quote-blk">
+            <label class="import-quote-input" for="import-file"
+              >Upload quotes</label
+            >
+            <input
+              class="import-quote-input"
+              type="file"
+              name="quote"
+              onchange="importFromJsonFile(event)"
+              accept=".json"
+              title="Upload a file"
+              id="import-file"
+            />
+          </div>
 
           <div class="show-quote-btn-blk">
             <select class="category__drop-down" id="categoryDropDown"></select>

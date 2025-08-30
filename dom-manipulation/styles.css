@@ -92,6 +92,10 @@ body {
 
 .main__form-heading-blk {
   width: 80%; 
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .field {
@@ -124,8 +128,12 @@ body {
   transition: all 0.13ms ease;
 }
 
-.import-quote-btn {
-  margin-right: 5rem;
+.import-quote-blk {
+display: flex;;
+flex-wrap: wrap;
+row-gap: 3rem;
+align-items: center;
+justify-content: center;
 }
 
 
@@ -197,7 +205,23 @@ body {
 .main__form-heading{
   text-align: center;
 }
+.server__message-blk {
+display: flex;
+width: 100%;
+height:5rem;
+justify-content: center;
+align-items: center;
+}
 
+.server__message-text { 
+ margin-top: 1rem;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: bold;
+  background-color: green;
+  padding: 0.2rem 1rem;
+  border-radius: 0.5rem;
+}
 
 .main__rendering {
   min-height: 10rem;
