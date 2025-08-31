@@ -83,10 +83,10 @@ Simply open `index.html` in your preferred browser.
 ## 📸 Screenshots
 
 **Create Quotes**
-![Create Quotes](dom-manipulation/quotes-media/DQG-CreateQuotes.png?raw=true)
+![Create Quotes](quotes-media/DQG-CreateQuotes.png?raw=true)
 
 **View Quotes**
-![Quotes View](dom-manipulation/quotes-media/DQG-Quotes.png?raw=true)
+![Quotes View](quotes-media/DQG-Quotes.png?raw=true)
 
 ---
 
