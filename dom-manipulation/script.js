@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       return data.map(item => ({
         text: item.body,
-        category: item.category || 'alx'
+        category: item.category || 'api'
       }))
 
     } catch (error) {

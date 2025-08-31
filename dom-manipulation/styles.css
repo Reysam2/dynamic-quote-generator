@@ -73,8 +73,6 @@ body {
   font-weight: 800;
 }
 
-
-
 .main {
   margin-top: 8rem;
 }
@@ -87,12 +85,12 @@ body {
 
 .form {
   margin-top: 2rem;
-  width: 80%;
+  width: 50%;
 }
 
 .main__form-heading-blk {
-  width: 80%; 
-  display:flex;
+  width: 100%;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -116,7 +114,9 @@ body {
   box-shadow: 2px 2px 4px 5px rgba(57, 24, 141, 0.2);
 }
 
-.create-btn ,.show-quote-btn,.export-quote-btn  {
+.create-btn,
+.show-quote-btn,
+.export-quote-btn {
   color: #f2f2f2;
   background-color: rgb(57, 24, 141);
   padding: 1rem 1rem;
@@ -129,27 +129,25 @@ body {
 }
 
 .import-quote-blk {
-display: flex;;
-flex-wrap: wrap;
-row-gap: 3rem;
-align-items: center;
-justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 3rem;
+  align-items: center;
+  justify-content: center;
 }
 
-
-
-.create-btn:active ,.show-quote-btn:active,
-.export-quote-btn:active,  
-.import-quote-input:active  {
-  transform: translate(0.2rem, 0.3rem); 
+.create-btn:active,
+.show-quote-btn:active,
+.export-quote-btn:active,
+.import-quote-input:active {
+  transform: translate(0.2rem, 0.3rem);
 }
 
 .create-n-import-blk {
-  display:flex;
+  display: flex;
   align-items: center;
-  flex:1;
+  flex: 1;
   flex-wrap: wrap;
-
 }
 
 .import-quote-input {
@@ -158,24 +156,23 @@ justify-content: center;
   padding: 1rem 1rem;
   border-radius: 1rem;
   font-size: 1.4rem;
-  font-weight: 800; 
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.13ms ease;
   appearance: none;
 }
 
-
 /* ////////// */
 
 .btn-select-blk {
-  min-height:15rem;
- width: 85%;
-  display:flex;
+  min-height: 15rem;
+  width: 80%;
+  display: flex;
   justify-content: space-around;
-  margin-top:2rem;
+  margin-top: 2rem;
   align-items: center;
   flex-wrap: wrap;
-   gap:3rem;
+  gap: 3rem;
 }
 
 .export-quote-btn {
@@ -186,7 +183,6 @@ justify-content: center;
   display: flex;
   justify-content: space-between;
   align-items: center;
- 
 }
 
 .show-quote-btn {
@@ -195,26 +191,26 @@ justify-content: center;
 
 .category__drop-down {
   height: 3rem;
-  align-self: center; 
-  transition: all 0.125s; 
-  text-align: center; 
+  align-self: center;
+  transition: all 0.125s;
+  text-align: center;
   border-radius: 0.5rem;
   padding: 0 3%;
-} 
+}
 
-.main__form-heading{
+.main__form-heading {
   text-align: center;
 }
 .server__message-blk {
-display: flex;
-width: 100%;
-height:5rem;
-justify-content: center;
-align-items: center;
+  display: flex;
+  width: 100%;
+  height: 5rem;
+  justify-content: center;
+  align-items: center;
 }
 
-.server__message-text { 
- margin-top: 1rem;
+.server__message-text {
+  margin-top: 1rem;
   color: white;
   font-size: 1.4rem;
   font-weight: bold;
@@ -225,8 +221,19 @@ align-items: center;
 
 .main__rendering {
   min-height: 10rem;
+  width: 100%;
+  margin-top: 8rem;
+  display: flex;
+  justify-content: center;
+}
+
+.quotes__container {
   width: 85%;
-  margin-top:3rem;
+  display: flex;
+  column-gap: 5rem;
+  row-gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .quote__card {
@@ -234,25 +241,26 @@ align-items: center;
   flex-direction: column;
   padding: 4%;
   min-height: 8rem;
+  width: 35rem;
   justify-content: space-around;
   margin-bottom: 3rem;
   box-shadow: 2px 2px 4px 5px rgba(57, 24, 141, 0.2);
 }
 
 .quote-txt {
-  padding: 2%;
+  padding: 3%;
 }
 .cat-blk {
   padding: 2%;
 }
 
 .cat-txt {
-  width: max-content;
+  width: fit-content;
   color: #f2f2f2;
   background-color: rgb(57, 24, 141);
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   font-size: 1.4rem;
   font-weight: 800;
-  margin-top: 0.3rem;
+  margin-top: 1rem;
 }
